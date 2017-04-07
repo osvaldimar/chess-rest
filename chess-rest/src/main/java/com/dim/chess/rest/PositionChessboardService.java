@@ -14,21 +14,19 @@ import com.chess.core.enums.TypePlayer;
 import com.chess.core.service.ChessService;
 
 @Path(value = "/")
-@Consumes(value = MediaType.APPLICATION_JSON)
-@Produces(value = MediaType.APPLICATION_JSON)
 public class PositionChessboardService {
 
 	@Path("/{position}/{player}")
 	@GET
-	public PositionChessboard getPos(@PathParam("position") String position, @PathParam("player") String player){
-		PositionChessboard posChess = PositionChessboard.getEnum(position);
-		TypePlayer type = TypePlayer.getEnum(player);
-		Response res = Response.status(200).entity("ok").build();
-		return posChess;
+	public String getPos(@PathParam("position") String position, @PathParam("player") String player){
+		ChessService service = new ChessService();
+		return service.selectAndMovePiece(position, player);
 	}
 	
 	@Path("/startChess")
 	@GET
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
 	public String startChess(){
 		ChessService service = new ChessService();
 		return service.startChess();
