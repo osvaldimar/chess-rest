@@ -1,4 +1,4 @@
-package com.dimar.chess.rest;
+package com.dim.chess.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
