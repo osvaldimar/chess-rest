@@ -6,9 +6,13 @@
   <packaging>war</packaging>
   <name>chess rest</name>
   <description>chess rest</description>
-  
  
   <dependencies>
+  	<dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>javax.servlet-api</artifactId>
+	    <version>3.1.0</version>
+	</dependency>
   	<dependency>
   		<groupId>com.dimar.chess.core</groupId>
   		<artifactId>chess-core</artifactId>
@@ -21,4 +25,17 @@
 	</dependency>
   </dependencies>
   
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

@@ -6,15 +6,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import com.chess.core.ResponseChessboard;
-import com.chess.core.enums.PositionChessboard;
-import com.chess.core.enums.TypePlayer;
 import com.chess.core.service.ChessService;
 
 @Path(value = "/")
-public class PositionChessboardService {
+@Consumes(value = MediaType.APPLICATION_JSON)
+@Produces(value = MediaType.APPLICATION_JSON)
+public class ChessWS {
 
 	@Path("/{position}/{player}")
 	@GET
@@ -25,8 +23,6 @@ public class PositionChessboardService {
 	
 	@Path("/startChess")
 	@GET
-	@Consumes(value = MediaType.APPLICATION_JSON)
-	@Produces(value = MediaType.APPLICATION_JSON)
 	public String startChess(){
 		ChessService service = new ChessService();
 		return service.startChess();
