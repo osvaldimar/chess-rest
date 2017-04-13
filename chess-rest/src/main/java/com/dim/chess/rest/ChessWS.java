@@ -1,6 +1,5 @@
 package com.dim.chess.rest;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,17 +11,17 @@ import com.chess.core.service.ChessService;
 import com.dim.chess.rest.model.PositionPlayer;
 
 @Path(value = "/")
-@Consumes(value = MediaType.APPLICATION_JSON)
-@Produces(value = MediaType.APPLICATION_JSON)
 public class ChessWS {
 
 	//@Inject
-	//private ChessboardPoolServices chessboards = new ChessboardPoolServices();
+	private ChessboardPoolServices chessboards = new ChessboardPoolServices();
 	
 	@Path("/move")
-	@POST
+	@GET
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
 	public String getPos(PositionPlayer model){
-		ChessService service = new ChessService();//chessboards.findById(model.getId());
+		ChessService service = chessboards.findById(model.getId());
 		if(service != null){
 			return service.selectAndMovePiece(model.getPosition(), model.getPlayer());
 		}
@@ -32,14 +31,16 @@ public class ChessWS {
 	@Path("/startChess")
 	@GET
 	public String startChess(){
-		ChessService service = new ChessService();//chessboards.create();
+		ChessService service = chessboards.create();
 		return service.startChess();
 	}
 	
 	@Path("/verifyCheck")
-	@GET	
+	@GET
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
 	public String verifyCheck(PositionPlayer model){
-		ChessService service = new ChessService();//chessboards.findById(model.getId());
+		ChessService service = chessboards.findById(model.getId());
 		if(service != null){
 			return service.verifyCheckmateTurn();
 		}

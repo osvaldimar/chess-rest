@@ -3,8 +3,6 @@ package com.dim.chess.rest;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import com.chess.core.service.ChessService;
 
 
