@@ -3,12 +3,20 @@ package com.dim.chess.rest;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
+
 import com.chess.core.service.ChessService;
 
-
+@Named
+@ApplicationScoped
 public class ChessboardPoolServices {
 
 	Map<Integer, ChessService> mapServices = new HashMap<>();
+
+	public ChessboardPoolServices(){
+		
+	}
 	
 	public synchronized ChessService findById(Integer id) {
 		return mapServices.get(1);

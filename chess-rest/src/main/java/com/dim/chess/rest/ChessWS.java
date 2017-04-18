@@ -1,46 +1,52 @@
 package com.dim.chess.rest;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.chess.core.service.ChessService;
-import com.dim.chess.rest.model.PositionPlayer;
 
+@RequestScoped
 @Path(value = "/")
 public class ChessWS {
 
-	//@Inject
-	private ChessboardPoolServices chessboards = new ChessboardPoolServices();
+	@Inject
+	private ChessboardPoolServices chessboards;
 	
-	@Path("/move")
+	@Path("/move/{id}/{player}/{position}")
 	@GET
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String getPos(PositionPlayer model){
-		ChessService service = chessboards.findById(model.getId());
+	public String getPos(@PathParam("id") int id, @PathParam("player") String player, 
+			@PathParam("position") String position){
+		
+		ChessService service = chessboards.findById(id);
 		if(service != null){
-			return service.selectAndMovePiece(model.getPosition(), model.getPlayer());
+			return service.selectAndMovePiece(position, player);
 		}
 		return "INVALID";
 	}
 	
 	@Path("/startChess")
 	@GET
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
 	public String startChess(){
 		ChessService service = chessboards.create();
 		return service.startChess();
 	}
 	
-	@Path("/verifyCheck")
+	@Path("/verifyCheck/{id}/{player}")
 	@GET
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String verifyCheck(PositionPlayer model){
-		ChessService service = chessboards.findById(model.getId());
+	public String verifyCheck(@PathParam("id") int id, @PathParam("player") String player){
+		ChessService service = chessboards.findById(id);
 		if(service != null){
 			return service.verifyCheckmateTurn();
 		}

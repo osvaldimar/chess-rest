@@ -1,9 +1,18 @@
 package com.dim.chess.rest.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class PositionPlayer {
 
+	@XmlElement
 	private Integer id;
+	
+	@XmlElement
 	private String position;
+	
+	@XmlElement
 	private String player;
 	
 	public Integer getId() {
