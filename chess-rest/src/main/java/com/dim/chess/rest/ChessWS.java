@@ -9,7 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.chess.core.service.ChessService;
+import com.chess.core.service.ChessServiceImpl;
 
 @RequestScoped
 @Path(value = "/")
@@ -18,6 +18,15 @@ public class ChessWS {
 	@Inject
 	private ChessboardPoolServices chessboards;
 	
+	@Path("/startChess")
+	@GET
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public String startChess(){
+		ChessServiceImpl service = chessboards.create();
+		return service.startChess();
+	}
+	
 	@Path("/move/{id}/{player}/{position}")
 	@GET
 	@Consumes(value = MediaType.APPLICATION_JSON)
@@ -25,20 +34,11 @@ public class ChessWS {
 	public String getPos(@PathParam("id") int id, @PathParam("player") String player, 
 			@PathParam("position") String position){
 		
-		ChessService service = chessboards.findById(id);
+		ChessServiceImpl service = chessboards.findById(id);
 		if(service != null){
 			return service.selectAndMovePiece(position, player);
 		}
 		return "INVALID";
-	}
-	
-	@Path("/startChess")
-	@GET
-	@Consumes(value = MediaType.APPLICATION_JSON)
-	@Produces(value = MediaType.APPLICATION_JSON)
-	public String startChess(){
-		ChessService service = chessboards.create();
-		return service.startChess();
 	}
 	
 	@Path("/verifyCheck/{id}/{player}")
@@ -46,7 +46,7 @@ public class ChessWS {
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
 	public String verifyCheck(@PathParam("id") int id, @PathParam("player") String player){
-		ChessService service = chessboards.findById(id);
+		ChessServiceImpl service = chessboards.findById(id);
 		if(service != null){
 			return service.verifyCheckmateTurn();
 		}

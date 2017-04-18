@@ -6,32 +6,32 @@ import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
-import com.chess.core.service.ChessService;
+import com.chess.core.service.ChessServiceImpl;
 
 @Named
 @ApplicationScoped
 public class ChessboardPoolServices {
 
-	Map<Integer, ChessService> mapServices = new HashMap<>();
+	Map<Integer, ChessServiceImpl> mapServices = new HashMap<>();
 
 	public ChessboardPoolServices(){
 		
 	}
 	
-	public synchronized ChessService findById(Integer id) {
+	public synchronized ChessServiceImpl findById(Integer id) {
 		return mapServices.get(1);
 	}
 	
-	public synchronized ChessService create() {
-		mapServices.put(1, new ChessService());
+	public synchronized ChessServiceImpl create() {
+		mapServices.put(1, new ChessServiceImpl());
 		return mapServices.get(1);
 	}
 
-	public Map<Integer, ChessService> getMapServices() {
+	public Map<Integer, ChessServiceImpl> getMapServices() {
 		return mapServices;
 	}
 
-	public void setMapServices(Map<Integer, ChessService> mapServices) {
+	public void setMapServices(Map<Integer, ChessServiceImpl> mapServices) {
 		this.mapServices = mapServices;
 	}
 
