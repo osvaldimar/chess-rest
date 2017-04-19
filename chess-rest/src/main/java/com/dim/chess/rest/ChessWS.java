@@ -2,7 +2,6 @@ package com.dim.chess.rest;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -20,7 +19,6 @@ public class ChessWS {
 	
 	@Path("/startChess")
 	@GET
-	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
 	public String startChess(){
 		ChessServiceImpl service = chessboards.create();
@@ -29,11 +27,9 @@ public class ChessWS {
 	
 	@Path("/move/{id}/{player}/{position}")
 	@GET
-	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String getPos(@PathParam("id") int id, @PathParam("player") String player, 
-			@PathParam("position") String position){
-		
+	public String selectAndMove(@PathParam("id") String id, @PathParam("player") String player, 
+			@PathParam("position") String position){		
 		ChessServiceImpl service = chessboards.findById(id);
 		if(service != null){
 			return service.selectAndMovePiece(position, player);
@@ -43,9 +39,8 @@ public class ChessWS {
 	
 	@Path("/verifyCheck/{id}/{player}")
 	@GET
-	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String verifyCheck(@PathParam("id") int id, @PathParam("player") String player){
+	public String verifyCheck(@PathParam("id") String id, @PathParam("player") String player){
 		ChessServiceImpl service = chessboards.findById(id);
 		if(service != null){
 			return service.verifyCheckmateTurn();
@@ -53,5 +48,37 @@ public class ChessWS {
 		return "INVALID";
 	}
 	
+	@Path("/promotion/{id}/{player}/{piece}")
+	@GET
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public String promotion(@PathParam("id") String id, @PathParam("player") String player, 
+			@PathParam("piece") String promotedPiece){		
+		ChessServiceImpl service = chessboards.findById(id);
+		if(service != null){
+			return service.choosePromotion(promotedPiece, player);
+		}
+		return "INVALID";
+	}
 	
+	@Path("/layout/{id}")
+	@GET
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public String layoutChessboard(@PathParam("id") String id){
+		ChessServiceImpl service = chessboards.findById(id);
+		if(service != null){
+			return service.getLayoutChessboard();
+		}
+		return "INVALID";
+	}
+	
+	@Path("/layoutJson/{id}")
+	@GET
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public String layoutJsonChessboard(@PathParam("id") String id){
+		ChessServiceImpl service = chessboards.findById(id);
+		if(service != null){
+			return service.getSquaresChessboardJson();
+		}
+		return "INVALID";
+	}
 }

@@ -2,6 +2,7 @@ package com.dim.chess.rest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
@@ -12,26 +13,27 @@ import com.chess.core.service.ChessServiceImpl;
 @ApplicationScoped
 public class ChessboardPoolServices {
 
-	Map<Integer, ChessServiceImpl> mapServices = new HashMap<>();
+	Map<String, ChessServiceImpl> mapServices = new HashMap<>();
 
 	public ChessboardPoolServices(){
 		
 	}
 	
-	public synchronized ChessServiceImpl findById(Integer id) {
-		return mapServices.get(1);
+	public synchronized ChessServiceImpl findById(String id) {
+		return mapServices.get(id);
 	}
 	
 	public synchronized ChessServiceImpl create() {
-		mapServices.put(1, new ChessServiceImpl());
-		return mapServices.get(1);
+		ChessServiceImpl service = new ChessServiceImpl();
+		mapServices.put(service.getUuidChess().toString(), service);
+		return mapServices.get(service.getUuidChess().toString());
 	}
 
-	public Map<Integer, ChessServiceImpl> getMapServices() {
+	public Map<String, ChessServiceImpl> getMapServices() {
 		return mapServices;
 	}
 
-	public void setMapServices(Map<Integer, ChessServiceImpl> mapServices) {
+	public void setMapServices(Map<String, ChessServiceImpl> mapServices) {
 		this.mapServices = mapServices;
 	}
 
