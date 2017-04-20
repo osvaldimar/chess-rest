@@ -15,7 +15,7 @@ import com.chess.core.service.ChessServiceImpl;
 public class ChessWS {
 
 	@Inject
-	private ChessboardPoolServices chessboards;
+	private ChessPoolServices chessboards;
 	
 	@Path("/startChess")
 	@GET

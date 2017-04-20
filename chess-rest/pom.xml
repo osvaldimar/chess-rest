@@ -8,7 +8,7 @@
   <description>chess rest</description>
  
  <properties>
- 	<jersey.version>1.19.3</jersey.version>
+ 	<jersey.server.version>1.19.3</jersey.server.version>
  	<jersey.test.version>2.22.1</jersey.test.version>
  </properties>
  
@@ -29,11 +29,16 @@
   		<artifactId>chess-core</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-  	<dependency>
+  	<!-- <dependency>
 		<groupId>com.sun.jersey</groupId>
 		<artifactId>jersey-server</artifactId>
-		<version>${jersey.version}</version>
-	</dependency>
+		<version>${jersey.server.version}</version>
+	</dependency> -->
+	<dependency>
+        <groupId>org.glassfish.jersey.containers</groupId>
+        <artifactId>jersey-container-servlet</artifactId>
+        <version>${jersey.test.version}</version>
+    </dependency>
 	<!-- testing jersey rest -->
     <dependency>
         <groupId>org.glassfish.jersey.test-framework.providers</groupId>

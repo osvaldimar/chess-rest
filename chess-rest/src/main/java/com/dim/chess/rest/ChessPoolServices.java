@@ -2,7 +2,6 @@ package com.dim.chess.rest;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
@@ -11,11 +10,11 @@ import com.chess.core.service.ChessServiceImpl;
 
 @Named
 @ApplicationScoped
-public class ChessboardPoolServices {
+public class ChessPoolServices {
 
 	Map<String, ChessServiceImpl> mapServices = new HashMap<>();
 
-	public ChessboardPoolServices(){
+	public ChessPoolServices(){
 		
 	}
 	
