@@ -8,6 +8,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.chess.core.client.ChessServiceRemote;
+import com.chess.core.client.ResponseClient;
+import com.chess.core.client.TransformJson;
 import com.chess.core.service.ChessServiceImpl;
 
 @RequestScoped
@@ -15,70 +18,63 @@ import com.chess.core.service.ChessServiceImpl;
 public class ChessWS {
 
 	@Inject
-	private ChessPoolServices chessboards;
+	private ChessPoolService chessPool;
+	private ChessServiceRemote service = new ChessServiceImpl();
 	
-	@Path("/startChess")
+	@Path("/startChessSingle")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String startChess(){
-		ChessServiceImpl service = chessboards.create();
-		return service.startChess();
+	public String startChessSinglePlayer(){
+		return TransformJson.createResponseJson(
+				chessPool.getChessGamePool().joinSinglePlayerOnlineChessPool());
+	}
+	
+	@Path("/startChessMulti")
+	@GET
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public ResponseClient startChessMultiplayer(){
+		return chessPool.getChessGamePool().joinMultiPlayerOnlineChessPool();
 	}
 	
 	@Path("/move/{id}/{player}/{position}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String selectAndMove(@PathParam("id") String id, @PathParam("player") String player, 
+	public ResponseClient selectAndMove(@PathParam("id") String id, @PathParam("player") String player, 
 			@PathParam("position") String position){		
-		ChessServiceImpl service = chessboards.findById(id);
-		if(service != null){
-			return service.selectAndMovePiece(position, player);
-		}
-		return "INVALID";
+		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+		return service.selectAndMovePiece(position, player);
 	}
 	
 	@Path("/verifyCheck/{id}/{player}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String verifyCheck(@PathParam("id") String id, @PathParam("player") String player){
-		ChessServiceImpl service = chessboards.findById(id);
-		if(service != null){
-			return service.verifyCheckmateTurn();
-		}
-		return "INVALID";
+	public ResponseClient verifyCheck(@PathParam("id") String id, @PathParam("player") String player){
+		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+		return service.verifyCheckmateTurn();
 	}
 	
 	@Path("/promotion/{id}/{player}/{piece}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String promotion(@PathParam("id") String id, @PathParam("player") String player, 
+	public ResponseClient promotion(@PathParam("id") String id, @PathParam("player") String player, 
 			@PathParam("piece") String promotedPiece){		
-		ChessServiceImpl service = chessboards.findById(id);
-		if(service != null){
-			return service.choosePromotion(promotedPiece, player);
-		}
-		return "INVALID";
+		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+		return service.choosePromotion(promotedPiece, player);
 	}
 	
-	@Path("/layout/{id}")
+	@Path("/layout/{id}/{player}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String layoutChessboard(@PathParam("id") String id){
-		ChessServiceImpl service = chessboards.findById(id);
-		if(service != null){
-			return service.getLayoutChessboard();
-		}
-		return "INVALID";
+	public String layoutChessboard(@PathParam("id") String id, @PathParam("player") String player){
+		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+		return service.getLayoutChessboard();
 	}
 	
-	@Path("/layoutJson/{id}")
+	@Path("/layoutJson/{id}/{player}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String layoutJsonChessboard(@PathParam("id") String id){
-		ChessServiceImpl service = chessboards.findById(id);
-		if(service != null){
-			return service.getSquaresChessboardJson();
-		}
-		return "INVALID";
+	public String layoutJsonChessboard(@PathParam("id") String id, @PathParam("player") String player){
+		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+		return service.getSquaresChessboardJson();
 	}
 }

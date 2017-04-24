@@ -25,7 +25,7 @@ public class ChessWSTest extends JerseyTest {
         AbstractBinder binder = new AbstractBinder() {			
 			@Override
 			protected void configure() {
-				bind(ChessPoolServices.class).to(ChessPoolServices.class);
+				bind(ChessPoolService.class).to(ChessPoolService.class);
 			}
 		};
 		config.register(binder);
@@ -34,7 +34,7 @@ public class ChessWSTest extends JerseyTest {
 	
 	@Test
 	public void testStartGameChess(){
-		Response response = target("/startChess").request().get();
+		Response response = target("/startChessSingle").request().get();
 		Assert.assertEquals("Method start chess should return status 200", 200, response.getStatus());
 		
 		String strJson = response.readEntity(String.class);
