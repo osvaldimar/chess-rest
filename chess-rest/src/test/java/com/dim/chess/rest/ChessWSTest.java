@@ -35,11 +35,15 @@ public class ChessWSTest extends JerseyTest {
 	@Test
 	public void testStartGameChess(){
 		Response response = target("/startChessSingle").request().get();
-		Assert.assertEquals("Method start chess should return status 200", 200, response.getStatus());
+		Assert.assertEquals("Method startChessSingle should return status 200", 200, response.getStatus());
 		
 		String strJson = response.readEntity(String.class);
 		ResponseClient resClient = TransformJson.fromJson(strJson);
 		Assert.assertEquals(resClient.getStatus(), StatusResponse.START.toString());
+	}
+	
+	@Test
+	public void should_create_greeting() {
 	}
 
 }

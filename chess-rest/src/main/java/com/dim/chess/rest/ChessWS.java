@@ -6,12 +6,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.chess.core.client.ChessServiceRemote;
-import com.chess.core.client.ResponseClient;
 import com.chess.core.client.TransformJson;
 import com.chess.core.service.ChessServiceImpl;
+import com.dim.chess.rest.exception.ChessParametersException;
 
 @RequestScoped
 @Path(value = "/")
@@ -26,55 +27,70 @@ public class ChessWS {
 	@Produces(value = MediaType.APPLICATION_JSON)
 	public String startChessSinglePlayer(){
 		return TransformJson.createResponseJson(
-				chessPool.getChessGamePool().joinSinglePlayerOnlineChessPool());
+				chessPool.joinSinglePlayerOnlineChessPool());
 	}
 	
 	@Path("/startChessMulti")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public ResponseClient startChessMultiplayer(){
-		return chessPool.getChessGamePool().joinMultiPlayerOnlineChessPool();
+	public String startChessMultiplayer(){
+		return TransformJson.createResponseJson(chessPool.joinMultiPlayerOnlineChessPool());
 	}
 	
-	@Path("/move/{id}/{player}/{position}")
+	@Path("/selectMove/{id}/{player}/{position}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public ResponseClient selectAndMove(@PathParam("id") String id, @PathParam("player") String player, 
-			@PathParam("position") String position){		
-		service.play(chessPool.getChessGamePool().findGameApp(id, player));
-		return service.selectAndMovePiece(position, player);
+	public String selectMove(@PathParam("id") String id, @PathParam("player") String player, 
+			@PathParam("position") String position) throws ChessParametersException{		
+		service.play(chessPool.findGameAppInChessPool(id, player));
+		return TransformJson.createResponseJson(service.selectAndMovePiece(position, player));
+	}
+	
+	@Path("/moveDirect/{id}/{player}")
+	@GET
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public String moveDirect(@PathParam("id") String id, @PathParam("player") String player, 
+			@QueryParam("from") String origin, @QueryParam("to") String destiny) 
+					throws ChessParametersException{
+		service.play(chessPool.findGameAppInChessPool(id, player));
+		//service.clearPieceClickedMarkOff();
+		service.selectAndMovePiece(origin, player);
+		return TransformJson.createResponseJson(service.selectAndMovePiece(destiny, player));
 	}
 	
 	@Path("/verifyCheck/{id}/{player}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public ResponseClient verifyCheck(@PathParam("id") String id, @PathParam("player") String player){
-		service.play(chessPool.getChessGamePool().findGameApp(id, player));
-		return service.verifyCheckmateTurn();
+	public String verifyCheck(@PathParam("id") String id, @PathParam("player") String player) 
+			throws ChessParametersException{
+		service.play(chessPool.findGameAppInChessPool(id, player));
+		return TransformJson.createResponseJson(service.verifyCheckmateTurn());
 	}
 	
 	@Path("/promotion/{id}/{player}/{piece}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public ResponseClient promotion(@PathParam("id") String id, @PathParam("player") String player, 
-			@PathParam("piece") String promotedPiece){		
-		service.play(chessPool.getChessGamePool().findGameApp(id, player));
-		return service.choosePromotion(promotedPiece, player);
+	public String promotion(@PathParam("id") String id, @PathParam("player") String player, 
+			@PathParam("piece") String promotedPiece) throws ChessParametersException{		
+		service.play(chessPool.findGameAppInChessPool(id, player));
+		return TransformJson.createResponseJson(service.choosePromotion(promotedPiece, player));
 	}
 	
 	@Path("/layout/{id}/{player}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String layoutChessboard(@PathParam("id") String id, @PathParam("player") String player){
-		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+	public String layoutChessboard(@PathParam("id") String id, @PathParam("player") String player) 
+			throws ChessParametersException{
+		service.play(chessPool.findGameAppInChessPool(id, player));
 		return service.getLayoutChessboard();
 	}
 	
 	@Path("/layoutJson/{id}/{player}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String layoutJsonChessboard(@PathParam("id") String id, @PathParam("player") String player){
-		service.play(chessPool.getChessGamePool().findGameApp(id, player));
+	public String layoutJsonChessboard(@PathParam("id") String id, @PathParam("player") String player) 
+			throws ChessParametersException{
+		service.play(chessPool.findGameAppInChessPool(id, player));
 		return service.getSquaresChessboardJson();
 	}
 }
