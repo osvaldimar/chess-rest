@@ -93,4 +93,18 @@ public class ChessWS {
 		service.play(chessPool.findGameAppInChessPool(id, player));
 		return service.getSquaresChessboardJson();
 	}
+	
+	@Path("/totalGameChessOnPool")
+	@GET
+	@Produces(value = MediaType.TEXT_HTML)
+	public String totalGameChessOnPool() {
+		return this.chessPool.totalGameChessOnPool();
+	}
+	@Path("/cleanChessGamePool")
+	@GET
+	@Produces(value = MediaType.TEXT_HTML)
+	public String cleanChessGamePool() {
+		this.chessPool.cleanChessGamePool();
+		return "Clean ok - " + this.chessPool.totalGameChessOnPool();
+	}
 }

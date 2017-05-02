@@ -33,4 +33,11 @@ public class ChessPoolService {
 		return this.chessGamePool.joinMultiPlayerOnlineChessPool();
 	}
 	
+	public String totalGameChessOnPool(){
+		return "Total games chess on pool: " + this.chessGamePool.getTotalChessPool();
+	}
+	
+	public void cleanChessGamePool(){
+		this.chessGamePool = new ChessGamePool();
+	}
 }
