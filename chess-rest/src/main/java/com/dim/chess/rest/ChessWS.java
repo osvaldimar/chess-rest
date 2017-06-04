@@ -37,6 +37,13 @@ public class ChessWS {
 		return TransformJson.createResponseJson(chessPool.joinMultiPlayerOnlineChessPool());
 	}
 	
+	@Path("/startChessMultiAI")
+	@GET
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public String startChessMultiplayerAI(){
+		return TransformJson.createResponseJson(chessPool.joinMultiPlayerAIOnlineChessPool());
+	}
+	
 	@Path("/selectMove/{id}/{player}/{position}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
@@ -64,7 +71,7 @@ public class ChessWS {
 	public String verifyCheck(@PathParam("id") String id, @PathParam("player") String player) 
 			throws ChessParametersException{
 		service.play(chessPool.findGameAppInChessPool(id, player));
-		return TransformJson.createResponseJson(service.verifyCheckmateTurn());
+		return TransformJson.createResponseJson(service.verifyCheckmateTurn(player));
 	}
 	
 	@Path("/promotion/{id}/{player}/{piece}")

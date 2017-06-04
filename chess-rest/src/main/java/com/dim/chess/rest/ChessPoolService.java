@@ -3,7 +3,6 @@ package com.dim.chess.rest;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
-import com.chess.core.ChessGamePool;
 import com.chess.core.GameApplication;
 import com.chess.core.client.ResponseClient;
 import com.dim.chess.rest.exception.ChessParametersException;
@@ -31,6 +30,10 @@ public class ChessPoolService {
 
 	public ResponseClient joinMultiPlayerOnlineChessPool() {
 		return this.chessGamePool.joinMultiPlayerOnlineChessPool();
+	}
+	
+	public ResponseClient joinMultiPlayerAIOnlineChessPool() {
+		return this.chessGamePool.joinMultiPlayerAIOnlineChessPool();
 	}
 	
 	public String totalGameChessOnPool(){
