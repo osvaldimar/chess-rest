@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.chess.core.client.ChessServiceRemote;
 import com.chess.core.client.TransformJson;
+import com.chess.core.model.Difficulty;
 import com.chess.core.service.ChessServiceImpl;
 import com.dim.chess.rest.exception.ChessParametersException;
 
@@ -37,11 +38,15 @@ public class ChessWS {
 		return TransformJson.createResponseJson(chessPool.joinMultiPlayerOnlineChessPool());
 	}
 	
-	@Path("/startChessMultiAI")
+	@Path("/startChessMultiAI/{level}")
 	@GET
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public String startChessMultiplayerAI(){
-		return TransformJson.createResponseJson(chessPool.joinMultiPlayerAIOnlineChessPool());
+	public String startChessMultiplayerAI(@PathParam("level") int level) throws ChessParametersException{
+		Difficulty.SimpleDifficulty simpleDifficulty = Difficulty.SimpleDifficulty.getEnum(level);
+		if(simpleDifficulty == null)
+			throw new ChessParametersException();
+		Difficulty difficultyAI = Difficulty.createSimpleDifficulty(simpleDifficulty);
+		return TransformJson.createResponseJson(chessPool.joinMultiPlayerAIOnlineChessPool(difficultyAI));
 	}
 	
 	@Path("/selectMove/{id}/{player}/{position}")

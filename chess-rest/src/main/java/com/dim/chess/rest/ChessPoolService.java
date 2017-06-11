@@ -5,6 +5,7 @@ import javax.inject.Named;
 
 import com.chess.core.GameApplication;
 import com.chess.core.client.ResponseClient;
+import com.chess.core.model.Difficulty;
 import com.dim.chess.rest.exception.ChessParametersException;
 
 @Named
@@ -32,8 +33,8 @@ public class ChessPoolService {
 		return this.chessGamePool.joinMultiPlayerOnlineChessPool();
 	}
 	
-	public ResponseClient joinMultiPlayerAIOnlineChessPool() {
-		return this.chessGamePool.joinMultiPlayerAIOnlineChessPool();
+	public ResponseClient joinMultiPlayerAIOnlineChessPool(Difficulty difficultyAI) {
+		return this.chessGamePool.joinMultiPlayerAIOnlineChessPool(difficultyAI);
 	}
 	
 	public String totalGameChessOnPool(){

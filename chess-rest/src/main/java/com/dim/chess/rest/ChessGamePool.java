@@ -69,22 +69,21 @@ public class ChessGamePool {
 		return buildResponseClientStartAdequateForThePlayer(keyClient);
 	}
 	
-	public ResponseClient joinMultiPlayerAIOnlineChessPool() {
+	public ResponseClient joinMultiPlayerAIOnlineChessPool(Difficulty difficultyAI) {
 		UUID singleUuid = UUID.randomUUID();
 		KeyClient keyClientW = new KeyClient(singleUuid, TypePlayer.W);	
 		KeyClient keyClientB = new KeyClient(singleUuid, TypePlayer.B);
 		ChessMultiplayerAI chessOnline = new ChessMultiplayerAI();
-		PlayerMode[] players = this.randomPlayerCommonAndAI();
+		PlayerMode[] players = this.randomPlayerCommonAndAI(difficultyAI);
 		GameApplication game = chessOnline.startChess(players[0], players[1]);
 		map.put(new KeyUUIDChess(keyClientW.getKey(), keyClientB.getKey()), game);
 		return this.buildResponseClientStartAdequateForThePlayer(!players[0].isAI() ? keyClientW : keyClientB);
 	}
 	
-	private PlayerMode[] randomPlayerCommonAndAI(){
+	private PlayerMode[] randomPlayerCommonAndAI(Difficulty difficultyAI){
 		PlayerMode[] players = {new Player(TypePlayer.W), new Player(TypePlayer.B)};
 		int r = new Random().nextInt(2);
-		Difficulty difficulty = new Difficulty(Difficulty.Level.LEVEL_AI_1, Difficulty.Deduction.LEVEL_DEDUCTION_1);
-		players[r] = new PlayerMachineAI(players[r].getTypePlayer(), difficulty);
+		players[r] = new PlayerMachineAI(players[r].getTypePlayer(), difficultyAI);
 		return players;
 	}
 	
